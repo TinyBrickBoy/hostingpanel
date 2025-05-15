@@ -1,1 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hosting Control Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter var', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <div class="flex h-screen">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 hidden md:flex flex-col h-screen relative z-10">
+      
+      <!-- Header -->
+      <div class="p-6 font-bold text-primary-600 flex items-center gap-3 border-b border-gray-100 shrink-0">
+        <i data-lucide="server" class="w-6 h-6"></i>
+        <span class="text-xl tracking-tight">Control Panel</span>
+      </div>
 
+      <!-- Navigation -->
+      <nav class="px-3 py-6 space-y-1 text-sm flex-1 overflow-y-auto">
+        <a href="#dashboard" class="flex items-center gap-3 py-2.5 px-3 rounded-lg bg-primary-50 text-primary-600 font-medium">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </a>
+
+        <!-- VPS -->
+        <div class="mt-6">
+          <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Service Management</p>
+          <div class="space-y-1">
+            <button onclick="toggleMenu('vpsMenu', 'vpsChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 transition group">
+              <span class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900">
+                <i data-lucide="cpu" class="w-5 h-5"></i> VPS
+              </span>
+              <i data-lucide="chevron-down" id="vpsChevron" class="w-4 h-4 transition-transform text-gray-400"></i>
+            </button>
+            <div id="vpsMenu" class="hidden pl-8 space-y-1 text-gray-600">
+              <a href="#buyvps" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New VPS
+              </a>
+              <a href="#vps1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="server" class="w-4 h-4 mr-2"></i>VPS 1
+              </a>
+              <a href="#vps2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="server" class="w-4 h-4 mr-2"></i>VPS 2
+              </a>
+            </div>
+          </div>
+
+          <!-- GameServer -->
+          <div class="space-y-1 mt-1">
+            <button onclick="toggleMenu('gameMenu', 'gameChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 transition group">
+              <span class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900">
+                <i data-lucide="gamepad-2" class="w-5 h-5"></i> GameServer
+              </span>
+              <i data-lucide="chevron-down" id="gameChevron" class="w-4 h-4 transition-transform text-gray-400"></i>
+            </button>
+            <div id="gameMenu" class="hidden pl-8 space-y-1 text-gray-600">
+              <a href="#buygameserver" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New GameServer
+              </a>
+              <a href="#gs1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 1
+              </a>
+              <a href="#gs2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 2
+              </a>
+              <a href="#gs3" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 3
+              </a>
+            </div>
+          </div>
+
+          <!-- WebServer -->
+          <div class="space-y-1 mt-1">
+            <button onclick="toggleMenu('webMenu', 'webChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 transition group">
+              <span class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900">
+                <i data-lucide="globe" class="w-5 h-5"></i> WebServer
+              </span>
+              <i data-lucide="chevron-down" id="webChevron" class="w-4 h-4 transition-transform text-gray-400"></i>
+            </button>
+            <div id="webMenu" class="hidden pl-8 space-y-1 text-gray-600">
+              <a href="#buywebserver" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New WebServer
+              </a>
+              <a href="#web1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>WebServer 1
+              </a>
+              <a href="#web2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>WebServer 2
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings & Support -->
+        <div class="mt-6">
+          <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Account</p>
+          <a href="#settings" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="settings" class="w-5 h-5"></i> Settings
+          </a>
+          <a href="#support" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="help-circle" class="w-5 h-5"></i> Support
+          </a>
+          <a href="#billing" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="credit-card" class="w-5 h-5"></i> Billing
+          </a>
+        </div>
+      </nav>
+      
+      <!-- User Profile Footer -->
+      <div class="p-4 border-t border-gray-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-700 truncate">User Name</p>
+          <p class="text-xs text-gray-500 truncate">user@example.com</p>
+        </div>
+        <button class="text-gray-400 hover:text-gray-500">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Nav Button -->
+    <div class="fixed top-4 left-4 z-20 md:hidden">
+      <button onclick="toggleMobileNav()" class="bg-white p-2 rounded-lg shadow-md text-gray-700">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-gray-50 overflow-y-auto">
+      <!-- Header -->
+      <header class="bg-white shadow-sm border-b border-gray-100 py-4 px-6 sm:px-8">
+        <div class="max-w-7xl mx-auto">
+          <h1 class="text-2xl font-semibold text-gray-800">Dashboard</h1>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <!-- VPS Interface -->
+<section id="vps1" class="space-y-6">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+        <i data-lucide="server" class="w-6 h-6 text-primary-600"></i>
+        VPS 1 Management
+      </h2>
+      <span class="text-sm text-gray-500">ID: #VPS-123456</span>
+    </div>
+
+    <!-- VPS Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="bg-gray-50 p-4 rounded-lg border">
+        <p class="text-xs text-gray-500 uppercase font-medium mb-1">Status</p>
+        <p class="text-green-600 font-semibold flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> Running
+        </p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg border">
+        <p class="text-xs text-gray-500 uppercase font-medium mb-1">IPv4</p>
+        <p class="text-gray-800 font-medium">192.168.1.100</p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg border">
+        <p class="text-xs text-gray-500 uppercase font-medium mb-1">CPU</p>
+        <p class="text-gray-800 font-medium">2 vCore</p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg border">
+        <p class="text-xs text-gray-500 uppercase font-medium mb-1">RAM</p>
+        <p class="text-gray-800 font-medium">4 GB</p>
+      </div>
+    </div>
+
+    <!-- VPS Controls -->
+    <div class="flex flex-wrap items-center gap-3">
+      <button class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition flex items-center gap-2">
+        <i data-lucide="refresh-ccw" class="w-4 h-4"></i> Restart
+      </button>
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition flex items-center gap-2">
+        <i data-lucide="pause" class="w-4 h-4"></i> Stop
+      </button>
+      <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2">
+        <i data-lucide="power" class="w-4 h-4"></i> Shutdown
+      </button>
+    </div>
+  </div>
+
+  <!-- VPS Console & Logs -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <h3 class="font-semibold text-gray-800 mb-3">Console Output</h3>
+      <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg h-64 overflow-y-auto">
+        [OK] VPS boot completed.<br />
+        [INFO] Service nginx started.<br />
+        [INFO] Service sshd running on port 22...<br />
+        [WARN] No swap memory allocated.<br />
+        ...
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <h3 class="font-semibold text-gray-800 mb-3">Recent Logs</h3>
+      <ul class="text-sm text-gray-700 space-y-2">
+        <li class="flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
+          VPS restarted on <strong>15.05.2025</strong> at 13:22
+        </li>
+        <li class="flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
+          Network reconfigured
+        </li>
+        <li class="flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
+          Firewall rule updated
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+    </main>
+  </div>
+
+  <!-- Mobile Navigation Overlay -->
+  <div id="mobileNav" class="fixed inset-0 bg-gray-900/60 z-30 hidden" onclick="toggleMobileNav()">
+    <div class="h-full w-64 bg-white shadow-xl" onclick="event.stopPropagation()">
+      <!-- Same content as sidebar but optimized for mobile -->
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu(menuId, chevronId) {
+      const menu = document.getElementById(menuId);
+      const chevron = document.getElementById(chevronId);
+      menu.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+    
+    function toggleMobileNav() {
+      const mobileNav = document.getElementById('mobileNav');
+      mobileNav.classList.toggle('hidden');
+    }
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
