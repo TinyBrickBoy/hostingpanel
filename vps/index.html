@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hosting Control Panel</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
@@ -36,7 +37,7 @@
   <div class="flex h-screen">
     
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 hidden md:flex flex-col h-screen relative z-10">
+    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 hidden md:flex flex-col h-screen sticky top-0 z-10">
       
       <!-- Header -->
       <div class="p-6 font-bold text-primary-600 flex items-center gap-3 border-b border-gray-100 shrink-0">
@@ -45,13 +46,13 @@
       </div>
 
       <!-- Navigation -->
-      <nav class="px-3 py-6 space-y-1 text-sm flex-1 overflow-y-auto">
+      <nav class="px-3 py-4 space-y-1 text-sm flex-1 overflow-y-auto">
         <a href="#dashboard" class="flex items-center gap-3 py-2.5 px-3 rounded-lg bg-primary-50 text-primary-600 font-medium">
           <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
         </a>
 
         <!-- VPS -->
-        <div class="mt-6">
+        <div class="mt-5">
           <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Service Management</p>
           <div class="space-y-1">
             <button onclick="toggleMenu('vpsMenu', 'vpsChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 transition group">
@@ -60,12 +61,12 @@
               </span>
               <i data-lucide="chevron-down" id="vpsChevron" class="w-4 h-4 transition-transform text-gray-400"></i>
             </button>
-            <div id="vpsMenu" class="hidden pl-8 space-y-1 text-gray-600">
+            <div id="vpsMenu" class="pl-8 space-y-1 text-gray-600">
               <a href="#buyvps" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
                 <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New VPS
               </a>
-              <a href="#vps1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
-                <i data-lucide="server" class="w-4 h-4 mr-2"></i>VPS 1
+              <a href="#vps1" class="flex items-center py-2 px-3 rounded-md bg-blue-50 text-primary-600 font-medium">
+                <i data-lucide="server" class="w-4 h-4 mr-2"></i>my-vps.example.com
               </a>
               <a href="#vps2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
                 <i data-lucide="server" class="w-4 h-4 mr-2"></i>VPS 2
@@ -86,13 +87,13 @@
                 <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New GameServer
               </a>
               <a href="#gs1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
-                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 1
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>minecraft-server
               </a>
               <a href="#gs2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
-                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 2
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>cs2-server
               </a>
               <a href="#gs3" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
-                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 3
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>valheim-server
               </a>
             </div>
           </div>
@@ -110,10 +111,10 @@
                 <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New WebServer
               </a>
               <a href="#web1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
-                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>WebServer 1
+                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>example.com
               </a>
               <a href="#web2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
-                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>WebServer 2
+                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>meineshop.de
               </a>
             </div>
           </div>
@@ -140,8 +141,8 @@
           <i data-lucide="user" class="w-5 h-5"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-gray-700 truncate">User Name</p>
-          <p class="text-xs text-gray-500 truncate">user@example.com</p>
+          <p class="text-sm font-medium text-gray-700 truncate">Max Mustermann</p>
+          <p class="text-xs text-gray-500 truncate">max@example.com</p>
         </div>
         <button class="text-gray-400 hover:text-gray-500">
           <i data-lucide="log-out" class="w-5 h-5"></i>
@@ -160,65 +161,558 @@
     <main class="flex-1 bg-gray-50 overflow-y-auto">
       
       <!-- VPS Interface -->
-<div class="p-6 space-y-8">
-  <div class="flex justify-between items-center">
-    <h1 class="text-2xl font-bold">VPS: my-vps.example.com</h1>
-    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Terminate VPS</button>
-  </div>
+      <div class="p-6 space-y-8">
+        <!-- Breadcrumb & Server Status -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <a href="#" class="hover:text-primary-600">Dashboard</a>
+              <span class="mx-2">/</span>
+              <a href="#" class="hover:text-primary-600">VPS</a>
+              <span class="mx-2">/</span>
+              <span class="text-gray-700 font-medium">my-vps.example.com</span>
+            </div>
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+              my-vps.example.com
+              <span class="text-sm px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">Running</span>
+            </h1>
+          </div>
+          <div class="flex gap-2">
+            <div class="dropdown relative">
+              <button onclick="toggleDropdown('actionDropdown')" class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded flex items-center gap-2 hover:bg-gray-50">
+                <i data-lucide="power" class="w-4 h-4"></i>
+                Actions
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </button>
+              <div id="actionDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Start</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Stop</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reboot</a>
+                <hr class="my-1 border-gray-200">
+                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Terminate</a>
+              </div>
+            </div>
+            <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 flex items-center gap-2">
+              <i data-lucide="shield" class="w-4 h-4"></i>
+              Upgrade
+            </button>
+          </div>
+        </div>
 
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Resource Usage</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-gray-100 p-4 rounded">CPU: 25%</div>
-      <div class="bg-gray-100 p-4 rounded">RAM: 2.5 GB / 8 GB</div>
-      <div class="bg-gray-100 p-4 rounded">Disk: 40 GB / 100 GB</div>
-      <div class="bg-gray-100 p-4 rounded">Traffic: 300 GB / 1 TB</div>
-    </div>
-  </section>
+        <!-- Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start mb-4">
+              <div class="text-gray-500">CPU Usage</div>
+              <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">Normal</span>
+            </div>
+            <div class="flex items-end gap-2">
+              <div class="text-2xl font-bold">25%</div>
+              <div class="text-xs text-gray-500">of 4 vCPUs</div>
+            </div>
+            <div class="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-primary-500 h-full rounded-full" style="width: 25%"></div>
+            </div>
+          </div>
 
-  <section>
-    <h2 class="text-xl font-semibold mb-2">SSH Access</h2>
-    <div class="space-y-2">
-      <input type="text" placeholder="SSH Password" class="w-full p-2 border rounded" />
-      <textarea placeholder="Authorized SSH Keys" class="w-full p-2 border rounded"></textarea>
-    </div>
-  </section>
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start mb-4">
+              <div class="text-gray-500">Memory</div>
+              <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">Normal</span>
+            </div>
+            <div class="flex items-end gap-2">
+              <div class="text-2xl font-bold">2.5 GB</div>
+              <div class="text-xs text-gray-500">of 8 GB</div>
+            </div>
+            <div class="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-primary-500 h-full rounded-full" style="width: 31%"></div>
+            </div>
+          </div>
 
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Backups</h2>
-    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Backup</button>
-    <ul class="mt-2 list-disc ml-5">
-      <li>backup-2025-05-15.tar.gz</li>
-      <li>backup-2025-05-01.tar.gz</li>
-    </ul>
-  </section>
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start mb-4">
+              <div class="text-gray-500">Storage</div>
+              <span class="text-xs font-medium text-yellow-600 bg-yellow-50 px-2 py-1 rounded">40% Used</span>
+            </div>
+            <div class="flex items-end gap-2">
+              <div class="text-2xl font-bold">40 GB</div>
+              <div class="text-xs text-gray-500">of 100 GB</div>
+            </div>
+            <div class="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-primary-500 h-full rounded-full" style="width: 40%"></div>
+            </div>
+          </div>
 
-  <section>
-    <h2 class="text-xl font-semibold mb-2">RDNS Settings</h2>
-    <div class="space-y-2">
-      <input type="text" placeholder="IP Address" class="w-full p-2 border rounded" />
-      <input type="text" placeholder="Hostname" class="w-full p-2 border rounded" />
-      <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Update RDNS</button>
-    </div>
-  </section>
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start mb-4">
+              <div class="text-gray-500">Network</div>
+              <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">Normal</span>
+            </div>
+            <div class="flex items-end gap-2">
+              <div class="text-2xl font-bold">300 GB</div>
+              <div class="text-xs text-gray-500">of 1 TB</div>
+            </div>
+            <div class="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-primary-500 h-full rounded-full" style="width: 30%"></div>
+            </div>
+          </div>
+        </div>
 
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Network</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="bg-gray-100 p-4 rounded">IPv4: 192.0.2.10</div>
-      <div class="bg-gray-100 p-4 rounded">IPv6: 2001:db8::1234</div>
-    </div>
-  </section>
+        <!-- Tabs -->
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8">
+            <button onclick="switchTab('overviewTab')" class="tab-btn border-primary-500 text-primary-600 border-b-2 py-4 px-1 text-sm font-medium">
+              Overview
+            </button>
+            <button onclick="switchTab('networkTab')" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 border-transparent border-b-2 py-4 px-1 text-sm font-medium">
+              Network
+            </button>
+            <button onclick="switchTab('storageTab')" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 border-transparent border-b-2 py-4 px-1 text-sm font-medium">
+              Storage
+            </button>
+            <button onclick="switchTab('backupsTab')" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 border-transparent border-b-2 py-4 px-1 text-sm font-medium">
+              Backups
+            </button>
+            <button onclick="switchTab('accessTab')" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 border-transparent border-b-2 py-4 px-1 text-sm font-medium">
+              Access
+            </button>
+            <button onclick="switchTab('settingsTab')" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 border-transparent border-b-2 py-4 px-1 text-sm font-medium">
+              Settings
+            </button>
+          </nav>
+        </div>
 
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Settings</h2>
-    <div class="flex gap-4">
-      <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Reinstall</button>
-      <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Reboot</button>
-    </div>
-  </section>
-</div>
+        <!-- Tab Content -->
+        <div id="overviewTab" class="tab-content">
+          <!-- Usage Charts -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-lg font-medium mb-4">CPU Usage (24h)</h3>
+              <div id="cpuChart" class="h-64"></div>
+            </div>
 
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-lg font-medium mb-4">Memory Usage (24h)</h3>
+              <div id="memoryChart" class="h-64"></div>
+            </div>
+          </div>
+
+          <!-- VPS Details -->
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <h3 class="text-lg font-medium mb-4">Server Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">Status</span>
+                  <span class="font-medium text-green-600">Running</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">Hostname</span>
+                  <span class="font-medium">my-vps.example.com</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">Plan</span>
+                  <span class="font-medium">VPS-4C-8G</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">OS</span>
+                  <span class="font-medium">Ubuntu 24.04 LTS</span>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">IPv4</span>
+                  <span class="font-medium">192.0.2.10</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">IPv6</span>
+                  <span class="font-medium">2001:db8::1234</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">Created</span>
+                  <span class="font-medium">2025-04-15</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-gray-600">Nächste Zahlung</span>
+                  <span class="font-medium">2025-06-15</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="networkTab" class="tab-content hidden">
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <h3 class="text-lg font-medium mb-4">IP Adressen</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="border-b border-gray-200">
+                  <tr>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Type</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">IP Address</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Hostname</th>
+                    <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr>
+                    <td class="py-3 px-4 text-sm">IPv4 (Primary)</td>
+                    <td class="py-3 px-4 text-sm font-medium">192.0.2.10</td>
+                    <td class="py-3 px-4 text-sm">my-vps.example.com</td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-primary-600 hover:text-primary-700 text-sm">Edit RDNS</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 text-sm">IPv6</td>
+                    <td class="py-3 px-4 text-sm font-medium">2001:db8::1234</td>
+                    <td class="py-3 px-4 text-sm">my-vps.example.com</td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-primary-600 hover:text-primary-700 text-sm">Edit RDNS</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mt-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium">Firewall</h3>
+              <button class="bg-primary-50 text-primary-600 px-4 py-2 rounded hover:bg-primary-100 font-medium">
+                Add Rule
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="border-b border-gray-200">
+                  <tr>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Protocol</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Port</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Source</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Action</th>
+                    <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr>
+                    <td class="py-3 px-4 text-sm">TCP</td>
+                    <td class="py-3 px-4 text-sm">22</td>
+                    <td class="py-3 px-4 text-sm">Any</td>
+                    <td class="py-3 px-4 text-sm">
+                      <span class="bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Allow</span>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-gray-400 hover:text-gray-500">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 text-sm">TCP</td>
+                    <td class="py-3 px-4 text-sm">80, 443</td>
+                    <td class="py-3 px-4 text-sm">Any</td>
+                    <td class="py-3 px-4 text-sm">
+                      <span class="bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Allow</span>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-gray-400 hover:text-gray-500">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="storageTab" class="tab-content hidden">
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium">Storage Usage</h3>
+              <button class="bg-primary-50 text-primary-600 px-4 py-2 rounded hover:bg-primary-100 font-medium">
+                Add Volume
+              </button>
+            </div>
+            <div id="storageChart" class="h-64 mb-4"></div>
+            <div class="mt-4 overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="border-b border-gray-200">
+                  <tr>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Volume</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Size</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Used</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Type</th>
+                    <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr>
+                    <td class="py-3 px-4 text-sm font-medium">Primary Disk</td>
+                    <td class="py-3 px-4 text-sm">100 GB</td>
+                    <td class="py-3 px-4 text-sm">
+                      <div class="flex items-center">
+                        <div class="w-32 h-2 bg-gray-100 rounded-full mr-2 overflow-hidden">
+                          <div class="bg-primary-500 h-full rounded-full" style="width: 40%"></div>
+                        </div>
+                        <span>40%</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4 text-sm">SSD</td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-primary-600 hover:text-primary-700 text-sm mr-2">Resize</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="backupsTab" class="tab-content hidden">
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium">Backups</h3>
+              <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 flex items-center gap-2">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Create Backup
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="border-b border-gray-200">
+                  <tr>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Name</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Date</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Size</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Status</th>
+                    <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr>
+                    <td class="py-3 px-4 text-sm font-medium">backup-2025-05-15.tar.gz</td>
+                    <td class="py-3 px-4 text-sm">15.05.2025 08:30</td>
+                    <td class="py-3 px-4 text-sm">2.45 GB</td>
+                    <td class="py-3 px-4 text-sm">
+                      <span class="bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Completed</span>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-primary-600 hover:text-primary-700 text-sm mr-2">Restore</button>
+                      <button class="text-primary-600 hover:text-primary-700 text-sm mr-2">Download</button>
+                      <button class="text-gray-400 hover:text-gray-500">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 text-sm font-medium">backup-2025-05-01.tar.gz</td>
+                    <td class="py-3 px-4 text-sm">01.05.2025 00:00</td>
+                    <td class="py-3 px-4 text-sm">2.41 GB</td>
+                    <td class="py-3 px-4 text-sm">
+                      <span class="bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Completed</span>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                      <button class="text-primary-600 hover:text-primary-700 text-sm mr-2">Restore</button>
+                      <button class="text-primary-600 hover:text-primary-700 text-sm mr-2">Download</button>
+                      <button class="text-gray-400 hover:text-gray-500">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mt-6">
+            <h3 class="text-lg font-medium mb-4">Backup Schedule</h3>
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <input type="checkbox" id="autoBackup" class="h-4 w-4 text-primary-600 rounded border-gray-300 mr-2">
+                <label for="autoBackup" class="text-sm text-gray-700">Enable automatic backups</label>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
+                  <select class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                  <select class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option>00:00</option>
+                    <option>03:00</option>
+                    <option>06:00</option>
+                    <option>12:00</option>
+                    <option>18:00</option>
+                    <option>21:00</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Backup Retention</label>
+                <select class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                  <option>Keep last 3 backups</option>
+                  <option>Keep last 5 backups</option>
+                  <option>Keep last 10 backups</option>
+                  <option>Keep all backups</option>
+                </select>
+              </div>
+              
+              <div class="pt-4">
+                <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700">Save Settings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="accessTab" class="tab-content hidden">
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <h3 class="text-lg font-medium mb-4">SSH Access</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Root Password</label>
+                <div class="relative">
+                  <input type="password" class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="••••••••••••">
+                  <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500">
+                    <i data-lucide="eye" class="w-5 h-5"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Generate New Password</label>
+                <button class="bg-primary-50 text-primary-600 px-4 py-2 rounded hover:bg-primary-100 font-medium">
+                  Generate Random Password
+                </button>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">SSH Key Authentication</label>
+                <textarea rows="4" class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm" placeholder="Paste your public SSH key here..."></textarea>
+              </div>
+              
+              <div class="pt-4">
+                <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700">Save SSH Settings</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mt-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium">Remote Console</h3>
+              <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700">
+                Open Console
+              </button>
+            </div>
+            <p class="text-sm text-gray-600">
+              Connect to your VPS through a browser-based console without SSH. Useful for emergency access if network configuration issues prevent SSH connections.
+            </p>
+          </div>
+        </div>
+
+        <div id="settingsTab" class="tab-content hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-lg font-medium mb-4">Hostname Settings</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Hostname</label>
+                  <input type="text" class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="my-vps.example.com">
+                </div>
+                
+                <div class="pt-4">
+                  <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700">Update Hostname</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-lg font-medium mb-4">DNS Settings</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Primary DNS Server</label>
+                  <input type="text" class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="8.8.8.8">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Secondary DNS Server</label>
+                  <input type="text" class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="8.8.4.4">
+                </div>
+                
+                <div class="pt-4">
+                  <button class="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700">Update DNS Settings</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-lg font-medium mb-4">Operating System</h3>
+              <div class="flex items-center bg-amber-50 text-amber-800 p-4 rounded-md mb-4">
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 flex-shrink-0"></i>
+                <p class="text-sm">Reinstalling the operating system will erase all data on the primary disk. Make sure you have a backup before proceeding.</p>
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Select OS</label>
+                  <select class="w-full border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option>Ubuntu 24.04 LTS</option>
+                    <option>Debian 12</option>
+                    <option>CentOS Stream 9</option>
+                    <option>Rocky Linux 9</option>
+                    <option>Windows Server 2025</option>
+                  </select>
+                </div>
+                
+                <div class="pt-4">
+                  <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Reinstall OS</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-lg font-medium mb-4">Power Management</h3>
+              <div class="space-y-4">
+                <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded flex items-center justify-center gap-2">
+                  <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                  Reboot
+                </button>
+                
+                <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded flex items-center justify-center gap-2">
+                  <i data-lucide="power-off" class="w-5 h-5"></i>
+                  Shutdown
+                </button>
+                
+                <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded flex items-center justify-center gap-2">
+                  <i data-lucide="play" class="w-5 h-5"></i>
+                  Boot
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mt-6">
+            <h3 class="text-lg font-medium mb-4 text-red-600">Danger Zone</h3>
+            <div class="border border-red-200 rounded-md p-4 bg-red-50">
+              <p class="text-sm text-red-800 mb-4">
+                Terminating your VPS will permanently delete all data. This action cannot be undone.
+              </p>
+              <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex items-center gap-2">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                Terminate VPS
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </main>
   </div>
@@ -227,6 +721,59 @@
   <div id="mobileNav" class="fixed inset-0 bg-gray-900/60 z-30 hidden" onclick="toggleMobileNav()">
     <div class="h-full w-64 bg-white shadow-xl" onclick="event.stopPropagation()">
       <!-- Same content as sidebar but optimized for mobile -->
+      <div class="p-6 font-bold text-primary-600 flex items-center gap-3 border-b border-gray-100">
+        <i data-lucide="server" class="w-6 h-6"></i>
+        <span class="text-xl tracking-tight">Control Panel</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="px-3 py-4 space-y-1 text-sm overflow-y-auto">
+        <a href="#dashboard" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </a>
+        
+        <!-- VPS -->
+        <div class="mt-4">
+          <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Service Management</p>
+          <a href="#vps" class="flex items-center gap-3 py-2.5 px-3 rounded-lg bg-primary-50 text-primary-600 font-medium">
+            <i data-lucide="cpu" class="w-5 h-5"></i> VPS
+          </a>
+          <a href="#gameserver" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="gamepad-2" class="w-5 h-5"></i> GameServer
+          </a>
+          <a href="#webserver" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="globe" class="w-5 h-5"></i> WebServer
+          </a>
+        </div>
+
+        <!-- Settings & Support -->
+        <div class="mt-6">
+          <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Account</p>
+          <a href="#settings" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="settings" class="w-5 h-5"></i> Settings
+          </a>
+          <a href="#support" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="help-circle" class="w-5 h-5"></i> Support
+          </a>
+          <a href="#billing" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="credit-card" class="w-5 h-5"></i> Billing
+          </a>
+        </div>
+      </nav>
+      
+      <!-- User Profile Footer -->
+      <div class="p-4 border-t border-gray-100 absolute bottom-0 w-full flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-700 truncate">Max Mustermann</p>
+          <p class="text-xs text-gray-500 truncate">max@example.com</p>
+        </div>
+        <button class="text-gray-400 hover:text-gray-500">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -242,6 +789,224 @@
       const mobileNav = document.getElementById('mobileNav');
       mobileNav.classList.toggle('hidden');
     }
+    
+    function toggleDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      dropdown.classList.toggle('hidden');
+    }
+    
+    // Create charts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // CPU Chart
+      var cpuChartOptions = {
+        series: [{
+          name: 'CPU Usage',
+          data: [15, 18, 12, 25, 22, 30, 18, 25, 32, 15, 20, 25]
+        }],
+        chart: {
+          type: 'line',
+          height: 250,
+          toolbar: {
+            show: false
+          }
+        },
+        colors: ['#0ea5e9'],
+        stroke: {
+          curve: 'smooth',
+          width: 3
+        },
+        grid: {
+          borderColor: '#f1f1f1',
+        },
+        markers: {
+          size: 4,
+          colors: ['#0ea5e9'],
+          strokeColors: '#ffffff',
+          strokeWidth: 2,
+          hover: {
+            size: 6,
+          }
+        },
+        xaxis: {
+          categories: ['6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '0:00', '2:00', '4:00'],
+          labels: {
+            style: {
+              colors: '#64748b',
+            },
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'CPU Usage (%)',
+            style: {
+              color: '#64748b',
+            }
+          },
+          min: 0,
+          max: 100,
+          labels: {
+            style: {
+              colors: '#64748b',
+            },
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + "%";
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: "vertical",
+            shadeIntensity: 0.5,
+            opacityFrom: 0.8,
+            opacityTo: 0.2,
+          }
+        }
+      };
+
+      var cpuChart = new ApexCharts(document.querySelector("#cpuChart"), cpuChartOptions);
+      cpuChart.render();
+      
+      // Memory Chart
+      var memoryChartOptions = {
+        series: [{
+          name: 'Memory Usage',
+          data: [2.1, 2.3, 2.2, 2.5, 2.7, 2.5, 2.4, 2.5, 2.3, 2.2, 2.4, 2.5]
+        }],
+        chart: {
+          type: 'line',
+          height: 250,
+          toolbar: {
+            show: false
+          }
+        },
+        colors: ['#0ea5e9'],
+        stroke: {
+          curve: 'smooth',
+          width: 3
+        },
+        grid: {
+          borderColor: '#f1f1f1',
+        },
+        markers: {
+          size: 4,
+          colors: ['#0ea5e9'],
+          strokeColors: '#ffffff',
+          strokeWidth: 2,
+          hover: {
+            size: 6,
+          }
+        },
+        xaxis: {
+          categories: ['6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '0:00', '2:00', '4:00'],
+          labels: {
+            style: {
+              colors: '#64748b',
+            },
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Memory Usage (GB)',
+            style: {
+              color: '#64748b',
+            }
+          },
+          min: 0,
+          max: 8,
+          labels: {
+            style: {
+              colors: '#64748b',
+            },
+            formatter: function (val) {
+              return val.toFixed(1) + " GB";
+            }
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val.toFixed(1) + " GB";
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: "vertical",
+            shadeIntensity: 0.5,
+            opacityFrom: 0.8,
+            opacityTo: 0.2,
+          }
+        }
+      };
+
+      var memoryChart = new ApexCharts(document.querySelector("#memoryChart"), memoryChartOptions);
+      memoryChart.render();
+      
+      // Storage Chart
+      var storageChartOptions = {
+        series: [40, 60],
+        chart: {
+          type: 'donut',
+          height: 250
+        },
+        colors: ['#0ea5e9', '#e2e8f0'],
+        labels: ['Used (40 GB)', 'Free (60 GB)'],
+        dataLabels: {
+          enabled: false
+        },
+        legend: {
+          position: 'bottom',
+          formatter: function(val, opts) {
+            return opts.w.globals.labels[opts.seriesIndex];
+          }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '65%',
+              labels: {
+                show: true,
+                name: {
+                  show: true,
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: '#334155'
+                },
+                value: {
+                  show: true,
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  color: '#334155',
+                  formatter: function (val) {
+                    return val + '%';
+                  }
+                },
+                total: {
+                  show: true,
+                  label: 'Total',
+                  formatter: function (w) {
+                    return '100 GB';
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      if (document.querySelector("#storageChart")) {
+        var storageChart = new ApexCharts(document.querySelector("#storageChart"), storageChartOptions);
+        storageChart.render();
+      }
+    });
 
     lucide.createIcons();
   </script>
