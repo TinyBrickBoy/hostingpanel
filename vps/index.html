@@ -160,84 +160,65 @@
     <main class="flex-1 bg-gray-50 overflow-y-auto">
       
       <!-- VPS Interface -->
-<section id="vps1" class="space-y-6">
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-        <i data-lucide="server" class="w-6 h-6 text-primary-600"></i>
-        VPS 1 Management
-      </h2>
-      <span class="text-sm text-gray-500">ID: #VPS-123456</span>
-    </div>
-
-    <!-- VPS Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <div class="bg-gray-50 p-4 rounded-lg border">
-        <p class="text-xs text-gray-500 uppercase font-medium mb-1">Status</p>
-        <p class="text-green-600 font-semibold flex items-center gap-2">
-          <i data-lucide="check-circle" class="w-4 h-4"></i> Running
-        </p>
-      </div>
-      <div class="bg-gray-50 p-4 rounded-lg border">
-        <p class="text-xs text-gray-500 uppercase font-medium mb-1">IPv4</p>
-        <p class="text-gray-800 font-medium">192.168.1.100</p>
-      </div>
-      <div class="bg-gray-50 p-4 rounded-lg border">
-        <p class="text-xs text-gray-500 uppercase font-medium mb-1">CPU</p>
-        <p class="text-gray-800 font-medium">2 vCore</p>
-      </div>
-      <div class="bg-gray-50 p-4 rounded-lg border">
-        <p class="text-xs text-gray-500 uppercase font-medium mb-1">RAM</p>
-        <p class="text-gray-800 font-medium">4 GB</p>
-      </div>
-    </div>
-
-    <!-- VPS Controls -->
-    <div class="flex flex-wrap items-center gap-3">
-      <button class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition flex items-center gap-2">
-        <i data-lucide="refresh-ccw" class="w-4 h-4"></i> Restart
-      </button>
-      <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition flex items-center gap-2">
-        <i data-lucide="pause" class="w-4 h-4"></i> Stop
-      </button>
-      <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2">
-        <i data-lucide="power" class="w-4 h-4"></i> Shutdown
-      </button>
-    </div>
+<div class="p-6 space-y-8">
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold">VPS: my-vps.example.com</h1>
+    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Terminate VPS</button>
   </div>
 
-  <!-- VPS Console & Logs -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h3 class="font-semibold text-gray-800 mb-3">Console Output</h3>
-      <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-lg h-64 overflow-y-auto">
-        [OK] VPS boot completed.<br />
-        [INFO] Service nginx started.<br />
-        [INFO] Service sshd running on port 22...<br />
-        [WARN] No swap memory allocated.<br />
-        ...
-      </div>
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Resource Usage</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-gray-100 p-4 rounded">CPU: 25%</div>
+      <div class="bg-gray-100 p-4 rounded">RAM: 2.5 GB / 8 GB</div>
+      <div class="bg-gray-100 p-4 rounded">Disk: 40 GB / 100 GB</div>
+      <div class="bg-gray-100 p-4 rounded">Traffic: 300 GB / 1 TB</div>
     </div>
+  </section>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h3 class="font-semibold text-gray-800 mb-3">Recent Logs</h3>
-      <ul class="text-sm text-gray-700 space-y-2">
-        <li class="flex items-center gap-2">
-          <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
-          VPS restarted on <strong>15.05.2025</strong> at 13:22
-        </li>
-        <li class="flex items-center gap-2">
-          <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
-          Network reconfigured
-        </li>
-        <li class="flex items-center gap-2">
-          <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
-          Firewall rule updated
-        </li>
-      </ul>
+  <section>
+    <h2 class="text-xl font-semibold mb-2">SSH Access</h2>
+    <div class="space-y-2">
+      <input type="text" placeholder="SSH Password" class="w-full p-2 border rounded" />
+      <textarea placeholder="Authorized SSH Keys" class="w-full p-2 border rounded"></textarea>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Backups</h2>
+    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Backup</button>
+    <ul class="mt-2 list-disc ml-5">
+      <li>backup-2025-05-15.tar.gz</li>
+      <li>backup-2025-05-01.tar.gz</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-semibold mb-2">RDNS Settings</h2>
+    <div class="space-y-2">
+      <input type="text" placeholder="IP Address" class="w-full p-2 border rounded" />
+      <input type="text" placeholder="Hostname" class="w-full p-2 border rounded" />
+      <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Update RDNS</button>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Network</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-gray-100 p-4 rounded">IPv4: 192.0.2.10</div>
+      <div class="bg-gray-100 p-4 rounded">IPv6: 2001:db8::1234</div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Settings</h2>
+    <div class="flex gap-4">
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Reinstall</button>
+      <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Reboot</button>
+    </div>
+  </section>
+</div>
+
 
     </main>
   </div>
