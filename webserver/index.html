@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebServer Management - Hosting Control Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter var', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <div class="flex h-screen">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 hidden md:flex flex-col h-screen relative z-10">
+      
+      <!-- Header -->
+      <div class="p-6 font-bold text-primary-600 flex items-center gap-3 border-b border-gray-100 shrink-0">
+        <i data-lucide="server" class="w-6 h-6"></i>
+        <span class="text-xl tracking-tight">Control Panel</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="px-3 py-6 space-y-1 text-sm flex-1 overflow-y-auto">
+        <a href="#dashboard" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 text-gray-700 hover:text-gray-900 transition">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </a>
+
+        <!-- VPS -->
+        <div class="mt-6">
+          <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Service Management</p>
+          <div class="space-y-1">
+            <button onclick="toggleMenu('vpsMenu', 'vpsChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 transition group">
+              <span class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900">
+                <i data-lucide="cpu" class="w-5 h-5"></i> VPS
+              </span>
+              <i data-lucide="chevron-down" id="vpsChevron" class="w-4 h-4 transition-transform text-gray-400"></i>
+            </button>
+            <div id="vpsMenu" class="hidden pl-8 space-y-1 text-gray-600">
+              <a href="#buyvps" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New VPS
+              </a>
+              <a href="#vps1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="server" class="w-4 h-4 mr-2"></i>VPS 1
+              </a>
+              <a href="#vps2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="server" class="w-4 h-4 mr-2"></i>VPS 2
+              </a>
+            </div>
+          </div>
+
+          <!-- GameServer -->
+          <div class="space-y-1 mt-1">
+            <button onclick="toggleMenu('gameMenu', 'gameChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 transition group">
+              <span class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900">
+                <i data-lucide="gamepad-2" class="w-5 h-5"></i> GameServer
+              </span>
+              <i data-lucide="chevron-down" id="gameChevron" class="w-4 h-4 transition-transform text-gray-400"></i>
+            </button>
+            <div id="gameMenu" class="hidden pl-8 space-y-1 text-gray-600">
+              <a href="#buygameserver" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New GameServer
+              </a>
+              <a href="#gs1" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 1
+              </a>
+              <a href="#gs2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 2
+              </a>
+              <a href="#gs3" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="gamepad" class="w-4 h-4 mr-2"></i>GameServer 3
+              </a>
+            </div>
+          </div>
+
+          <!-- WebServer -->
+          <div class="space-y-1 mt-1">
+            <button onclick="toggleMenu('webMenu', 'webChevron')" class="flex items-center justify-between w-full py-2.5 px-3 rounded-lg bg-primary-50 text-primary-600 font-medium transition group">
+              <span class="flex items-center gap-3">
+                <i data-lucide="globe" class="w-5 h-5"></i> WebServer
+              </span>
+              <i data-lucide="chevron-down" id="webChevron" class="w-4 h-4 rotate-180 transition-transform"></i>
+            </button>
+            <div id="webMenu" class="pl-8 space-y-1 text-gray-600">
+              <a href="#buywebserver" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>New WebServer
+              </a>
+              <a href="#web1" class="flex items-center py-2 px-3 rounded-md bg-gray-100 text-primary-600">
+                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>WebServer 1
+              </a>
+              <a href="#web2" class="flex items-center py-2 px-3 rounded-md hover:bg-gray-100 hover:text-primary-600 transition">
+                <i data-lucide="globe" class="w-4 h-4 mr-2"></i>WebServer 2
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings & Support -->
+        <div class="mt-6">
+          <p class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Account</p>
+          <a href="#settings" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="settings" class="w-5 h-5"></i> Settings
+          </a>
+          <a href="#support" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="help-circle" class="w-5 h-5"></i> Support
+          </a>
+          <a href="#billing" class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 transition text-gray-700 hover:text-gray-900">
+            <i data-lucide="credit-card" class="w-5 h-5"></i> Billing
+          </a>
+        </div>
+      </nav>
+      
+      <!-- User Profile Footer -->
+      <div class="p-4 border-t border-gray-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-700 truncate">User Name</p>
+          <p class="text-xs text-gray-500 truncate">user@example.com</p>
+        </div>
+        <button class="text-gray-400 hover:text-gray-500">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Nav Button -->
+    <div class="fixed top-4 left-4 z-20 md:hidden">
+      <button onclick="toggleMobileNav()" class="bg-white p-2 rounded-lg shadow-md text-gray-700">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-gray-50 overflow-y-auto">
+      <!-- Header -->
+      <header class="bg-white shadow-sm border-b border-gray-100 py-4 px-6 sm:px-8">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex items-center">
+            <h1 class="text-2xl font-semibold text-gray-800">WebServer 1</h1>
+            <span class="ml-3 px-2.5 py-0.5 rounded-full text-sm bg-green-100 text-green-800">Running</span>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <div class="max-w-7xl mx-auto py-6 px-6 sm:px-8">
+        <!-- Quick Actions -->
+        <div class="mb-6 flex flex-wrap gap-3">
+          <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+            <i data-lucide="power" class="w-4 h-4"></i> Restart Server
+          </button>
+          <button class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+            <i data-lucide="pause" class="w-4 h-4"></i> Stop Server
+          </button>
+          <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+            <i data-lucide="external-link" class="w-4 h-4"></i> Open Website
+          </button>
+          <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition ml-auto">
+            <i data-lucide="settings" class="w-4 h-4"></i> Settings
+          </button>
+        </div>
+        
+        <!-- Info Cards + Usage Graphs -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <!-- Left Column: Server Information -->
+          <div class="lg:col-span-1 space-y-6">
+            <!-- Server Details -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-medium text-gray-800">Server Details</h3>
+                <a href="#edit" class="text-primary-600 hover:text-primary-700 text-sm">Edit</a>
+              </div>
+              <div class="divide-y divide-gray-100">
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">Domain Name</span>
+                  <span class="text-sm font-medium text-gray-900">example.com</span>
+                </div>
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">IP Address</span>
+                  <span class="text-sm font-medium text-gray-900">192.168.2.100</span>
+                </div>
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">Server Type</span>
+                  <span class="text-sm font-medium text-gray-900">Shared Hosting</span>
+                </div>
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">Web Server</span>
+                  <span class="text-sm font-medium text-gray-900">Nginx 1.24.0</span>
+                </div>
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">PHP Version</span>
+                  <span class="text-sm font-medium text-gray-900">PHP 8.2.7</span>
+                </div>
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">Database</span>
+                  <span class="text-sm font-medium text-gray-900">MySQL 8.0.33</span>
+                </div>
+                <div class="px-6 py-4 grid grid-cols-2">
+                  <span class="text-sm text-gray-500">SSL Certificate</span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-sm font-medium text-gray-900">Let's Encrypt</span>
+                    <span class="text-xs bg-green-100 text-green-800 rounded-full px-2 py-0.5">Valid</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Access Credentials -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="font-medium text-gray-800">Access Credentials</h3>
+              </div>
+              <div class="divide-y divide-gray-100">
+                <div class="px-6 py-4">
+                  <p class="text-sm font-medium text-gray-700 mb-2">FTP Access</p>
+                  <div class="space-y-2">
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Host</span>
+                      <span class="text-sm font-medium text-gray-900">ftp.example.com</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Username</span>
+                      <span class="text-sm font-medium text-gray-900">user_ftp</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm text-gray-500">Password</span>
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium text-gray-900">••••••••••</span>
+                        <button class="text-primary-600 hover:text-primary-700">
+                          <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                        <button class="text-primary-600 hover:text-primary-700">
+                          <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Port</span>
+                      <span class="text-sm font-medium text-gray-900">21</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="px-6 py-4">
+                  <p class="text-sm font-medium text-gray-700 mb-2">Database Access</p>
+                  <div class="space-y-2">
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Host</span>
+                      <span class="text-sm font-medium text-gray-900">localhost</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Database</span>
+                      <span class="text-sm font-medium text-gray-900">db_example</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-sm text-gray-500">Username</span>
+                      <span class="text-sm font-medium text-gray-900">user_db</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm text-gray-500">Password</span>
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium text-gray-900">••••••••••</span>
+                        <button class="text-primary-600 hover:text-primary-700">
+                          <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                        <button class="text-primary-600 hover:text-primary-700">
+                          <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="px-6 py-4">
+                  <a href="#creds" class="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
+                    <i data-lucide="key" class="w-4 h-4"></i> Manage All Credentials
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Columns: Usage Graphs -->
+          <div class="lg:col-span-2 space-y-6">
+            <!-- Website Statistics -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="font-medium text-gray-800">Website Statistics</h3>
+              </div>
+              <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-medium text-gray-700">Total Visits</span>
+                      <span class="p-1 rounded bg-blue-100 text-blue-600">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">12,486</p>
+                    <p class="text-xs text-green-600 mt-1">
+                      <i data-lucide="trending-up" class="w-3 h-3 inline"></i>
+                      <span class="ml-1">+8.2% from last month</span>
+                    </p>
+                  </div>
+                  
+                  <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-medium text-gray-700">Unique Visitors</span>
+                      <span class="p-1 rounded bg-purple-100 text-purple-600">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">5,723</p>
+                    <p class="text-xs text-green-600 mt-1">
+                      <i data-lucide="trending-up" class="w-3 h-3 inline"></i>
+                      <span class="ml-1">+4.6% from last month</span>
+                    </p>
+                  </div>
+                  
+                  <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-medium text-gray-700">Avg. Time on Site</span>
+                      <span class="p-1 rounded bg-amber-100 text-amber-600">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                      </span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">3m 42s</p>
+                    <p class="text-xs text-red-600 mt-1">
+                      <i data-lucide="trending-down" class="w-3 h-3 inline"></i>
+                      <span class="ml-1">-1.2% from last month</span>
+                    </p>
+                  </div>
+                </div>
+                
+                <!-- Visitor Chart -->
+                <div class="h-64 border-t border-gray-100 pt-6">
+                  <!-- Simplified chart representation -->
+                  <div class="relative h-48">
+                    <div class="absolute inset-0 flex items-end justify-between px-2">
+                      <div class="w-1/24 bg-primary-200 rounded-t h-1/12"></div>
+                      <div class="w-1/24 bg-primary-200 rounded-t h-1/10"></div>
+                      <div class="w-1/24 bg-primary-300 rounded-t h-1/8"></div>
+                      <div class="w-1/24 bg-primary-300 rounded-t h-1/6"></div>
+                      <div class="w-1/24 bg-primary-400 rounded-t h-1/5"></div>
+                      <div class="w-1/24 bg-primary-400 rounded-t h-1/4"></div>
+                      <div class="w-1/24 bg-primary-500 rounded-t h-1/3"></div>
+                      <div class="w-1/24 bg-primary-500 rounded-t h-2/5"></div>
+                      <div class="w-1/24 bg-primary-500 rounded-t h-1/2"></div>
+                      <div class="w-1/24 bg-primary-600 rounded-t h-3/5"></div>
+                      <div class="w-1/24 bg-primary-600 rounded-t h-4/5"></div>
+                      <div class="w-1/24 bg-primary-600 rounded-t h-5/6"></div>
+                      <div class="w-1/24 bg-primary-600 rounded-t h-full"></div>
+                      <div class="w-1/24 bg-primary-600 rounded-t h-5/6"></div>
+                      <div class="w-1/24 bg-primary-500 rounded-t h-4/5"></div>
+                      <div class="w-1/24 bg-primary-500 rounded-t h-2/3"></div>
+                      <div class="w-1/24 bg-primary-500 rounded-t h-3/5"></div>
+                      <div class="w-1/24 bg-primary-400 rounded-t h-1/2"></div>
+                      <div class="w-1/24 bg-primary-400 rounded-t h-2/5"></div>
+                      <div class="w-1/24 bg-primary-300 rounded-t h-1/3"></div>
+                      <div class="w-1/24 bg-primary-300 rounded-t h-1/4"></div>
+                      <div class="w-1/24 bg-primary-200 rounded-t h-1/5"></div>
+                      <div class="w-1/24 bg-primary-200 rounded-t h-1/6"></div>
+                      <div class="w-1/24 bg-primary-100 rounded-t h-1/8"></div>
+                    </div>
+                    <!-- Chart Axes -->
+                    <div class="absolute inset-x-0 bottom-0 border-t border-gray-200"></div>
+                    <div class="absolute inset-y-0 left-0 border-r border-gray-200"></div>
+                  </div>
+                  <div class="flex justify-between text-xs text-gray-500 mt-2 px-2">
+                    <span>Apr 16</span>
+                    <span>Apr 23</span>
+                    <span>Apr 30</span>
+                    <span>May 7</span>
+                    <span>May 14</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Server Resources -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Disk Usage -->
+              <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100">
+                  <h3 class="font-medium text-gray-800">Disk Usage</h3>
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm text-gray-500">Used: 7.4 GB of 15 GB</span>
+                    <span class="text-sm font-medium text-gray-900">49%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 24%"></div>
+                  </div>
+                  
+                  <div class="h-40 mt-6 flex items-end justify-between">
+                    <!-- Bandwidth usage chart -->
+                    <div class="w-1/12 bg-green-200 rounded-t h-1/6"></div>
+                    <div class="w-1/12 bg-green-300 rounded-t h-1/4"></div>
+                    <div class="w-1/12 bg-green-400 rounded-t h-1/3"></div>
+                    <div class="w-1/12 bg-green-500 rounded-t h-1/2"></div>
+                    <div class="w-1/12 bg-green-600 rounded-t h-3/4"></div>
+                    <div class="w-1/12 bg-green-600 rounded-t h-2/3"></div>
+                    <div class="w-1/12 bg-green-500 rounded-t h-1/2"></div>
+                    <div class="w-1/12 bg-green-400 rounded-t h-2/5"></div>
+                    <div class="w-1/12 bg-green-400 rounded-t h-1/3"></div>
+                    <div class="w-1/12 bg-green-300 rounded-t h-1/4"></div>
+                    <div class="w-1/12 bg-green-300 rounded-t h-1/5"></div>
+                    <div class="w-1/12 bg-green-200 rounded-t h-1/6"></div>
+                  </div>
+                  <div class="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>Apr 16</span>
+                    <span>May 14</span>
+                  </div>
+                  
+                  <div class="mt-4">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-gray-500">Projected usage this month</span>
+                      <span class="font-medium text-gray-900">~85 GB</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tabs for different management options -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+          <div class="border-b border-gray-100">
+            <nav class="flex -mb-px overflow-x-auto">
+              <a href="#websitemanager" class="py-4 px-6 border-b-2 border-primary-600 text-primary-600 font-medium flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="layout" class="w-4 h-4"></i> Website Manager
+              </a>
+              <a href="#domains" class="py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="globe" class="w-4 h-4"></i> Domains
+              </a>
+              <a href="#database" class="py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="database" class="w-4 h-4"></i> Databases
+              </a>
+              <a href="#email" class="py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="mail" class="w-4 h-4"></i> Email
+              </a>
+              <a href="#security" class="py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="shield" class="w-4 h-4"></i> Security
+              </a>
+              <a href="#backup" class="py-4 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="archive" class="w-4 h-4"></i> Backups
+              </a>
+            </nav>
+          </div>
+          
+          <!-- Website Manager Content -->
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-medium text-gray-800">Website Files</h3>
+              <div class="flex gap-2">
+                <button class="bg-primary-50 text-primary-600 hover:bg-primary-100 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1 transition">
+                  <i data-lucide="upload" class="w-4 h-4"></i> Upload
+                </button>
+                <button class="bg-primary-50 text-primary-600 hover:bg-primary-100 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1 transition">
+                  <i data-lucide="folder-plus" class="w-4 h-4"></i> New Folder
+                </button>
+              </div>
+            </div>
+            
+            <!-- Breadcrumbs -->
+            <div class="flex items-center text-sm text-gray-500 mb-4">
+              <a href="#root" class="hover:text-primary-600">Root</a>
+              <i data-lucide="chevron-right" class="w-4 h-4 mx-1"></i>
+              <a href="#public" class="hover:text-primary-600">public_html</a>
+            </div>
+            
+            <!-- File Browser -->
+            <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Modified</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Permissions</th>
+                      <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50 transition">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <i data-lucide="folder" class="w-5 h-5 text-amber-500 mr-2"></i>
+                          <span class="text-sm font-medium text-gray-900">assets</span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">Directory</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">-</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">May 10, 2025</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">755</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <div class="flex justify-end gap-2">
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="folder-open" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="edit" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-50 transition">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <i data-lucide="folder" class="w-5 h-5 text-amber-500 mr-2"></i>
+                          <span class="text-sm font-medium text-gray-900">images</span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">Directory</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">-</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">May 12, 2025</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">755</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <div class="flex justify-end gap-2">
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="folder-open" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="edit" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-50 transition">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <i data-lucide="file-text" class="w-5 h-5 text-blue-500 mr-2"></i>
+                          <span class="text-sm font-medium text-gray-900">index.php</span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">PHP File</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">12.4 KB</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">May 14, 2025</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">644</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <div class="flex justify-end gap-2">
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="edit" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="download" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-50 transition">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <i data-lucide="file" class="w-5 h-5 text-orange-500 mr-2"></i>
+                          <span class="text-sm font-medium text-gray-900">style.css</span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">CSS File</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">45.2 KB</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">May 13, 2025</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">644</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <div class="flex justify-end gap-2">
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="edit" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="download" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-50 transition">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <i data-lucide="file" class="w-5 h-5 text-yellow-500 mr-2"></i>
+                          <span class="text-sm font-medium text-gray-900">script.js</span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">JS File</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">28.7 KB</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">May 14, 2025</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-500">644</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <div class="flex justify-end gap-2">
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="edit" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="download" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                          <button class="p-1 rounded hover:bg-gray-100">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-gray-500"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="px-6 py-3 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+                <div class="text-sm text-gray-500">Showing 5 of 24 items</div>
+                <div class="flex gap-2">
+                  <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Previous
+                  </button>
+                  <button class="px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-500 hover:bg-gray-50">
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Navigation Overlay -->
+  <div id="mobileNav" class="fixed inset-0 bg-gray-900/60 z-30 hidden" onclick="toggleMobileNav()">
+    <div class="h-full w-64 bg-white shadow-xl" onclick="event.stopPropagation()">
+      <!-- Same content as sidebar but optimized for mobile -->
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu(menuId, chevronId) {
+      const menu = document.getElementById(menuId);
+      const chevron = document.getElementById(chevronId);
+      menu.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+    
+    function toggleMobileNav() {
+      const mobileNav = document.getElementById('mobileNav');
+      mobileNav.classList.toggle('hidden');
+    }
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
